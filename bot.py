@@ -18,26 +18,19 @@ bugs = {
 # Sambutan Selamat Datang beserta petunjuk penggunaan
 def welcome_message():
     return '''
-🎉 **Selamat Datang di RyyStore Tools!** 🎉
+🎉 Selamat Datang di RyyStore Tools!🎉
 
 Hai! Terima kasih telah bergabung dengan *RyyStore Tools*, tempat terbaik untuk memenuhi semua kebutuhan tools digital Anda! 🎈
 
 Di sini, kami menyediakan berbagai layanan yang praktis dan mudah diakses. Mulai dari pembuatan akun VPN, konfigurasi jaringan, hingga optimasi tools lainnya—semuanya siap membantu meningkatkan pengalaman Anda. 🚀💡
 
-📌 **Apa yang Bisa Anda Harapkan di RyyStore Tools?**
-- **Layanan Cepat**: Respon cepat untuk semua kebutuhan Anda!
-- **Keamanan Terjamin**: Data dan privasi Anda selalu menjadi prioritas kami.
-- **Kemudahan Akses**: Layanan dengan panduan mudah dan langkah yang jelas.
-
----
-
-**Cara Menggunakan Bot:**
-1. **Kirim Link VMess/Trojan**: Cukup kirimkan link VMess atau Trojan yang ingin Anda modifikasi.
-2. **Pilih Bug**: Bot akan meminta Anda memilih bug yang ingin diterapkan (misalnya, XL Vidio, Telkomsel Edukasi, atau IlmuPedia).
-3. **Pilih Lokasi Bug**: Anda bisa memilih apakah bug akan dimasukkan di bagian *Address* atau *SNI* pada link.
-4. **Hasilkan Link Baru**: Setelah memilih bug dan lokasinya, bot akan menghasilkan link VMess/Trojan yang telah diperbarui dengan bug yang dipilih.
-
-Jika ada yang bisa kami bantu, jangan ragu untuk bertanya. Kami di sini untuk memastikan Anda mendapatkan yang terbaik dari layanan kami. Selamat menikmati pengalaman bersama *RyyStore Tools*! 🔥
+@Cara Menggunakan Bot@
+1. Kirim Link VMess/Trojan: Cukup kirimkan link VMess atau Trojan yang ingin Anda modifikasi.
+2. Pilih Bug: Bot akan meminta Anda memilih bug yang ingin diterapkan (misalnya, XL Vidio, Telkomsel Edukasi, atau IlmuPedia).
+3. Pilih Lokasi Bug: Anda bisa memilih apakah bug akan dimasukkan di bagian *Address* atau *SNI* pada link.
+4. Hasilkan Link Baru: Setelah memilih bug dan lokasinya, bot akan menghasilkan link VMess/Trojan yang telah diperbarui dengan bug yang dipilih.
+5. Ingin mengulangi? langsung kirim link Vmess/Trojannya saja!
+Jika ada yang bisa kami bantu, jangan ragu untuk bertanya. @RyyVpn26 *RyyStore Tools*! 🔥
 '''
 
 # Fungsi untuk membuat keyboard pilihan bug
