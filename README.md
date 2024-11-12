@@ -7,7 +7,7 @@ sudo apt install python3-pip
 pip3 install pyTelegramBotAPI
 ```
 ```
-```git clone https://github.com/ryankputra/botgeneratebug.git
+git clone https://github.com/ryankputra/botgeneratebug.git
 ```
 ```
 cd botgeneratebug
