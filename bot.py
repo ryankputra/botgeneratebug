@@ -12,7 +12,9 @@ bugs = {
     "xl_vidio": "quiz.int.vidio.com",
     "xl_edukasi": "172.67.73.39",
     "telkomsel_ilped": "104.26.6.171",
-    "telkomsel_ilped_alt": "104.26.7.171"
+    "telkomsel_ilped_alt": "104.26.7.171",
+    "xl_viu": "zaintest.vuclip.com",  # Bug XL viu
+    "xl_vip": "192.168.8.1"  # Bug XL VIP
 }
 
 # Sambutan Selamat Datang beserta petunjuk penggunaan
@@ -39,6 +41,8 @@ def create_bug_keyboard():
     markup.add(InlineKeyboardButton("XL Vidio", callback_data="bug_xl_vidio"))
     markup.add(InlineKeyboardButton("XL Edukasi", callback_data="bug_xl_edukasi"))
     markup.add(InlineKeyboardButton("Telkomsel IlmuPedia", callback_data="bug_telkomsel_ilped"))
+    markup.add(InlineKeyboardButton("XL Viu", callback_data="bug_xl_viu"))  # Pilihan bug XL Viu
+    markup.add(InlineKeyboardButton("XL VIP", callback_data="bug_xl_vip"))  # Pilihan bug XL VIP
     return markup
 
 # Fungsi untuk membuat keyboard pilihan field (address atau SNI)
