@@ -16,7 +16,7 @@ bugs = {
     "telkomsel_ilped": "104.26.6.171",
     "telkomsel_ilped_alt": "104.26.7.171",
     "xl_viu": "zaintest.vuclip.com",  # Bug XL viu
-    "xl_vip": "192.168.8.1"  # Bug XL VIP
+    "xl_vip": "104.17.3.81"  # Bug XL VIP
 }
 
 # Sambutan Selamat Datang beserta petunjuk penggunaan
