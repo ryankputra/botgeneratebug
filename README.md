@@ -30,3 +30,6 @@ python3 bot.py
 ```
 screen -r
 ```
+```
+rm -rf botgeneratebug
+```
