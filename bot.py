@@ -16,7 +16,8 @@ bugs = {
     "telkomsel_ilped": "104.26.6.171",
     "telkomsel_ilped_alt": "104.26.7.171",
     "xl_viu": "zaintest.vuclip.com",  # Bug XL viu
-    "xl_vip": "104.17.3.81"  # Bug XL VIP
+    "xl_vip": "104.17.3.81",
+    "bug_byu_opok": "space.byu.id" 
 }
 
 # Sambutan Selamat Datang beserta petunjuk penggunaan
@@ -32,10 +33,12 @@ Bug Yang Tersedia:
 - XL VIU
 - XL VIP
 - TELKOMSEL ILMUPEDIA
-
-Cara Menggunakan Bot
+- BYU OPOK
+============================================================
+============================================================
+CARA MENGGUNAKAN BOT:
 1. Kirim Link VMess/Trojan: Cukup kirimkan link VMess atau Trojan yang ingin Anda modifikasi.
-Jika ada butuh SSH, VMess, Trojan. Bisa Beli Di @RyyVpn26 *RyyStore Tools*! 🔥
+Jika ada butuh SSH, VMess, Trojan. Bisa Beli Di @RyyVpn26 Tools! 🔥
 '''
 
 # Fungsi untuk membuat keyboard pilihan bug
@@ -45,7 +48,8 @@ def create_bug_keyboard():
     markup.add(InlineKeyboardButton("XL Edukasi", callback_data="bug_xl_edukasi"))
     markup.add(InlineKeyboardButton("Telkomsel IlmuPedia", callback_data="bug_telkomsel_ilped"))
     markup.add(InlineKeyboardButton("XL Viu", callback_data="bug_xl_viu"))  # Pilihan bug XL Viu
-    markup.add(InlineKeyboardButton("XL VIP", callback_data="bug_xl_vip"))  # Pilihan bug XL VIP
+    markup.add(InlineKeyboardButton("XL VIP", callback_data="bug_xl_vip"))
+    markup.add(InlineKeyboardButton("BYU OPOK", callback_data="bug_byu_opok")) 
     return markup
 
 # Fungsi untuk membuat keyboard pilihan field (address atau SNI)
