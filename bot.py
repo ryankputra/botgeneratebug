@@ -17,7 +17,7 @@ bugs = {
     "telkomsel_ilped_alt": "104.26.7.171",
     "xl_viu": "zaintest.vuclip.com",  # Bug XL viu
     "xl_vip": "104.17.3.81",
-    "bug_byu_opok": "space.byu.id" 
+    "byu_opok": "space.byu.id" 
 }
 
 # Sambutan Selamat Datang beserta petunjuk penggunaan
