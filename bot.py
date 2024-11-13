@@ -34,8 +34,7 @@ Bug Yang Tersedia:
 - XL VIP
 - TELKOMSEL ILMUPEDIA
 - BYU OPOK
-============================================================
-============================================================
+======================
 CARA MENGGUNAKAN BOT:
 1. Kirim Link VMess/Trojan: Cukup kirimkan link VMess atau Trojan yang ingin Anda modifikasi.
 Jika ada butuh SSH, VMess, Trojan. Bisa Beli Di @RyyVpn26 Tools! 🔥
