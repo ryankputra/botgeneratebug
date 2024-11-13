@@ -53,8 +53,12 @@ def welcome_message():
 Silakan pilih layanan yang Anda butuhkan:
 
 1. 🛜Generate VMess/Trojan
-   - Modifikasi config dengan berbagai bug
-   - Support XL, Telkomsel, dan BYU
+   Bug Yang Tersedia:
+   - XL Vidio
+   - XL Edukasi
+   - XL VIU
+   - XL VIP
+   - TELKOMSEL ILMUPEDIA
 
 2. 🔑 Generate OTP 2FA
    - Generate kode OTP dari secret 2FA
