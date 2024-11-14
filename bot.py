@@ -4,6 +4,7 @@ import base64
 import json
 import pyotp
 import logging
+from datetime import datetime
 
 # Konfigurasi logging
 logging.basicConfig(
@@ -21,6 +22,7 @@ bot = telebot.TeleBot(API_TOKEN)
 user_links = {}
 user_secrets = {}
 active_users = set()
+user_data = {}  # Untuk menyimpan informasi pengguna
 
 # Dictionary pilihan bug
 bugs = {
@@ -120,13 +122,57 @@ def generate_link_with_bug(link, bug, field, is_trojan=False):
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
+    # Menyimpan informasi pengguna
+    user_id = message.from_user.id
+    username = message.from_user.username or "No Username"
+    first_name = message.from_user.first_name or "No Name"
+    
+    user_data[user_id] = {
+        'username': username,
+        'first_name': first_name,
+        'join_date': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+    
+    active_users.add(user_id)
+    
     bot.send_message(
         message.chat.id,
         welcome_message(),
         reply_markup=main_menu_keyboard(),
         parse_mode="Markdown"
     )
-    active_users.add(message.from_user.id)
+
+@bot.message_handler(commands=['users'])
+def show_users(message):
+    if message.from_user.id != ADMIN_ID:
+        return
+    
+    users_text = "📊 *Daftar Pengguna Bot*\n\n"
+    for user_id, data in user_data.items():
+        users_text += f"👤 *Nama:* {data['first_name']}\n"
+        users_text += f"🆔 *User ID:* `{user_id}`\n"
+        users_text += f"📝 *Username:* @{data['username']}\n"
+        users_text += f"📅 *Bergabung:* {data['join_date']}\n"
+        users_text += "➖➖➖➖➖➖➖➖➖➖\n"
+    
+    total_users = len(user_data)
+    users_text += f"\n📈 *Total Pengguna:* {total_users}"
+    
+    # Mengirim dalam beberapa pesan jika terlalu panjang
+    max_length = 4096
+    if len(users_text) > max_length:
+        for x in range(0, len(users_text), max_length):
+            bot.send_message(
+                message.chat.id,
+                users_text[x:x+max_length],
+                parse_mode="Markdown"
+            )
+    else:
+        bot.send_message(
+            message.chat.id,
+            users_text,
+            parse_mode="Markdown"
+        )
 
 @bot.callback_query_handler(func=lambda call: True)
 def handle_callback(call):
