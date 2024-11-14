@@ -1,26 +1,93 @@
-import json
+import telebot
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import base64
+import json
 import pyotp
-from telebot import TeleBot
-from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
+import logging
 
-API_TOKEN = "7307313664:AAHnWmKaaOew8cBFGbOTu2ipfQQ8M_twL0U"
-ADMIN_ID = 6583386476  # Ganti dengan ID admin
-bot = TeleBot(API_TOKEN)
+# Konfigurasi logging
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
-# Menyimpan ID pengguna aktif yang menggunakan bot
-active_users = set()
+# Konfigurasi Bot
+API_TOKEN = '7307313664:AAHnWmKaaOew8cBFGbOTu2ipfQQ8M_twL0U'
+ADMIN_ID = 6583386476
+bot = telebot.TeleBot(API_TOKEN)
+
+# Penyimpanan data
 user_links = {}
 user_secrets = {}
-bugs = {
-    # Tambahkan bugs yang sesuai
-}
+active_users = set()
 
-def welcome_message():
-    return "Selamat datang di RyyStore Tools!"
+# Dictionary pilihan bug
+bugs = {
+    "xl_vidio": "quiz.int.vidio.com",
+    "xl_edukasi": "172.67.73.39",
+    "telkomsel_ilped": "104.26.6.171",
+    "telkomsel_ilped_alt": "104.26.7.171",
+    "xl_viu": "zaintest.vuclip.com",
+    "xl_vip": "104.17.3.81",
+    "byu_opok": "space.byu.id"
+}
 
 def main_menu_keyboard():
     markup = InlineKeyboardMarkup()
+    markup.row(
+        InlineKeyboardButton("🔄 Generate VMess/Trojan", callback_data="menu_vmess")
+    )
+    markup.row(
+        InlineKeyboardButton("🔑 Generate OTP", callback_data="menu_otp")
+    )
+    markup.row(
+        InlineKeyboardButton("ℹ️ Bantuan", callback_data="menu_help")
+    )
+    return markup
+
+def welcome_message():
+    return '''
+🌀Selamat Datang di RyyStore Multi Tools!🌀
+
+Silakan pilih layanan yang Anda butuhkan:
+
+1. 🛜Generate VMess/Trojan
+   Bug Yang Tersedia:
+   - XL Vidio
+   - XL Edukasi
+   - XL VIU
+   - XL VIP
+   - TELKOMSEL ILMUPEDIA
+
+2. 🔑 Generate OTP 2FA
+   - Generate kode OTP dari secret 2FA
+   - Simpan secret key dengan aman
+
+3. ℹ️ Bantuan
+   - Panduan penggunaan
+   - Informasi tambahan
+
+Pilih menu di bawah untuk memulai!
+'''
+
+def create_bug_keyboard():
+    markup = InlineKeyboardMarkup()
+    markup.row(InlineKeyboardButton("XL Vidio", callback_data="bug_xl_vidio"),
+               InlineKeyboardButton("XL Edukasi", callback_data="bug_xl_edukasi"))
+    markup.row(InlineKeyboardButton("Telkomsel IlmuPedia", callback_data="bug_telkomsel_ilped"))
+    markup.row(InlineKeyboardButton("XL Viu", callback_data="bug_xl_viu"),
+               InlineKeyboardButton("XL VIP", callback_data="bug_xl_vip"))
+    markup.row(InlineKeyboardButton("BYU OPOK", callback_data="bug_byu_opok"))
+    markup.row(InlineKeyboardButton("🔙 Kembali ke Menu", callback_data="back_to_menu"))
+    return markup
+
+def create_field_keyboard(bug_value):
+    markup = InlineKeyboardMarkup()
+    markup.row(
+        InlineKeyboardButton("Address", callback_data=f"field_address_{bug_value}"),
+        InlineKeyboardButton("SNI", callback_data=f"field_sni_{bug_value}")
+    )
     markup.row(InlineKeyboardButton("🔙 Kembali", callback_data="menu_vmess"))
     return markup
 
@@ -59,7 +126,7 @@ def send_welcome(message):
         reply_markup=main_menu_keyboard(),
         parse_mode="Markdown"
     )
-    active_users.add(message.from_user.id)  # Menambahkan ID pengguna ke daftar active_users
+    active_users.add(message.from_user.id)
 
 @bot.callback_query_handler(func=lambda call: True)
 def handle_callback(call):
@@ -68,6 +135,7 @@ def handle_callback(call):
             "Silakan kirim link VMess atau Trojan Anda untuk dimodifikasi.",
             call.message.chat.id,
             call.message.message_id,
+          
         )
     
     elif call.data == "menu_otp":
@@ -166,15 +234,6 @@ def handle_secret(message):
     except Exception as e:
         bot.reply_to(message, "❌ Secret key tidak valid. Mohon periksa kembali.")
 
-# Fitur baru untuk menampilkan statistik pengguna bot (khusus admin)
-@bot.message_handler(func=lambda message: message.from_user.id == ADMIN_ID and message.text == "/user_stats")
-def handle_user_stats(message):
-    user_count = len(active_users)
-    user_list = "\n".join([str(user_id) for user_id in active_users])
-    response = f"📊 *Statistik Pengguna Bot*\n\nTotal Pengguna: {user_count}\n\nDaftar Pengguna:\n{user_list}"
-    bot.reply_to(message, response, parse_mode="Markdown")
-
-# Perintah broadcast untuk mengirim pesan ke semua pengguna (khusus admin)
 @bot.message_handler(func=lambda message: message.from_user.id == ADMIN_ID and message.text.startswith("/broadcast"))
 def handle_broadcast(message):
     broadcast_message = message.text.replace("/broadcast", "").strip()
