@@ -28,8 +28,8 @@ user_data = {}  # Untuk menyimpan informasi pengguna
 bugs = {
     "xl_vidio": "quiz.int.vidio.com",
     "xl_edukasi": "172.67.73.39",
-    "telkomsel_ilped": "104.26.6.171",
-    "telkomsel_ilped_alt": "104.26.7.171",
+    "telkomsel_ilped": "104.26.7.171",
+    "telkomsel_ilped_alt": "104.26.6.171",
     "xl_viu": "zaintest.vuclip.com",
     "xl_vip": "104.17.3.81",
     "byu_opok": "space.byu.id"
