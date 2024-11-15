@@ -84,6 +84,15 @@ def create_bug_keyboard():
     markup.row(InlineKeyboardButton("🔙 Kembali ke Menu", callback_data="back_to_menu"))
     return markup
 
+def create_telkomsel_ilped_keyboard():
+    markup = InlineKeyboardMarkup()
+    markup.row(
+        InlineKeyboardButton("Telkomsel IlmuPedia Bug 1", callback_data="bug_telkomsel_ilped"),
+        InlineKeyboardButton("Telkomsel IlmuPedia Bug 2 (rekomended)", callback_data="bug_telkomsel_ilped_alt")
+    )
+    markup.row(InlineKeyboardButton("🔙 Kembali", callback_data="menu_vmess"))
+    return markup
+
 def create_field_keyboard(bug_value):
     markup = InlineKeyboardMarkup()
     markup.row(
