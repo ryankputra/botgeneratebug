@@ -31,37 +31,29 @@ python3 bot.py
 
 running menggunakan systemd
 ```
-sudo nano /etc/systemd/system/telegrambot.service
+sudo nano /etc/systemd/system/bugbot.service
 ```
 ISI
 ```
 [Unit]
-Description=Telegram Bot Service
+Description=Bug Bot Service
 After=network.target
 
 [Service]
-Type=simple
-User=YOUR_USERNAME
-WorkingDirectory=/path/to/botgeneratebug
-ExecStart=/usr/bin/python3 /path/to/botgeneratebug/main.py
+ExecStart=/usr/bin/python3 /root/botgeneratebug/bot.py
 Restart=always
-RestartSec=10
+User=root
+WorkingDirectory=/root/botgeneratebug
 
 [Install]
 WantedBy=multi-user.target
+
 ```
 Jalankan
 ```
-# Reload daemon
 sudo systemctl daemon-reload
-
-# Start bot
-sudo systemctl start bugbot
-
-# Enable autostart saat reboot
+sudo systemctl start bugbot 
 sudo systemctl enable bugbot
-
-# Cek status bot
 sudo systemctl status bugbot
 ```
 cek apakah bot berjalan
