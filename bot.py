@@ -187,8 +187,7 @@ def show_users(message):
 def handle_callback(call):
     if call.data == "menu_vmess":
         bot.edit_message_text(
-            "Silakan kirim link VMess atau Trojan Anda untuk dimodifikasi.
-            Gausah bingung, kirimkan link mentahan yang sudah kamu copy!",
+            "Silakan kirim link VMess atau Trojan Anda untuk dimodifikasi. Gausah bingung, kirimkan link mentahan yang sudah kamu copy!",
             call.message.chat.id,
             call.message.message_id,
           
