@@ -129,6 +129,17 @@ def generate_link_with_bug(link, bug, field, is_trojan=False):
     except Exception as e:
         return f"Error processing link: {e}"
 
+@bot.message_handler(commands=['status'])
+def handle_status(message):
+    # Tautan server
+    server_link = "https://stats.uptimerobot.com/3rNrce2g6i"
+    
+    bot.reply_to(
+        message,
+        f"🌐 Status server dapat dilihat di tautan berikut:\n\n[Klik di sini untuk melihat status server]({server_link})",
+        parse_mode="Markdown"
+    )
+    
 @bot.message_handler(commands=['generate'])
 def send_welcome(message):
     # Menyimpan informasi pengguna
