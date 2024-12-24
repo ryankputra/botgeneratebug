@@ -14,8 +14,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Konfigurasi Bot
-API_TOKEN = '8102705894:AAHaIqvqKzbs0Sv71KOwLNrUBpPKO8Mn1HQ'
-ADMIN_ID = 7903440029
+API_TOKEN = '7721294308:AAHTMdqL9WVGwJqSLcgB0NQt-sHJYey3XUM'
+ADMIN_ID = 7251232303
 bot = telebot.TeleBot(API_TOKEN)
 
 # Penyimpanan data
@@ -129,7 +129,7 @@ def generate_link_with_bug(link, bug, field, is_trojan=False):
     except Exception as e:
         return f"Error processing link: {e}"
 
-@bot.message_handler(commands=['start'])
+@bot.message_handler(commands=['generate'])
 def send_welcome(message):
     # Menyimpan informasi pengguna
     user_id = message.from_user.id
