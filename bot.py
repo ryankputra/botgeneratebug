@@ -73,6 +73,62 @@ Silakan pilih layanan yang Anda butuhkan:
 Pilih menu di bawah untuk memulai!
 '''
 
+def create_bug_keyboard():
+    markup = InlineKeyboardMarkup()
+    markup.row(InlineKeyboardButton("XL Vidio", callback_data="bug_xl_vidio"),
+               InlineKeyboardButton("XL Edukasi", callback_data="bug_xl_edukasi"))
+    markup.row(InlineKeyboardButton("Telkomsel IlmuPedia", callback_data="bug_telkomsel_ilped"))
+    markup.row(InlineKeyboardButton("XL Viu", callback_data="bug_xl_viu"),
+               InlineKeyboardButton("XL VIP", callback_data="bug_xl_vip"))
+    markup.row(InlineKeyboardButton("BYU OPOK", callback_data="bug_byu_opok"))
+    markup.row(InlineKeyboardButton("🔙 Kembali ke Menu", callback_data="back_to_menu"))
+    return markup
+
+def create_telkomsel_ilped_keyboard():
+    markup = InlineKeyboardMarkup()
+    markup.row(
+        InlineKeyboardButton("Telkomsel IlmuPedia Bug 1", callback_data="bug_telkomsel_ilped"),
+        InlineKeyboardButton("Telkomsel IlmuPedia Bug 2 (rekomended)", callback_data="bug_telkomsel_ilped_alt")
+    )
+    markup.row(InlineKeyboardButton("🔙 Kembali", callback_data="menu_vmess"))
+    return markup
+
+def create_field_keyboard(bug_value):
+    markup = InlineKeyboardMarkup()
+    markup.row(
+        InlineKeyboardButton("Address", callback_data=f"field_address_{bug_value}"),
+        InlineKeyboardButton("SNI", callback_data=f"field_sni_{bug_value}")
+    )
+    markup.row(InlineKeyboardButton("🔙 Kembali", callback_data="menu_vmess"))
+    return markup
+
+def generate_link_with_bug(link, bug, field, is_trojan=False):
+    try:
+        if is_trojan:
+            trojan_parts = link.split('@')
+            uuid = trojan_parts[0].split('://')[1]
+            host_parts = trojan_parts[1].split('?')
+            hostname_port = host_parts[0].split(':')
+            hostname = hostname_port[0]
+            port = hostname_port[1]
+            params = host_parts[1] if len(host_parts) > 1 else ""
+            
+            updated_params = params
+            if field == "sni":
+                updated_params = params.replace(f"sni={hostname}", f"sni={bug}")
+            elif field == "address":
+                hostname = bug
+            return f"trojan://{uuid}@{hostname}:{port}?{updated_params}"
+
+        vmess_data = json.loads(base64.b64decode(link[8:]).decode('utf-8'))
+        if field == "address":
+            vmess_data["add"] = bug
+        elif field == "sni":
+            vmess_data["sni"] = bug
+        return "vmess://" + base64.b64encode(json.dumps(vmess_data).encode('utf-8')).decode('utf-8')
+    except Exception as e:
+        return f"Error processing link: {e}"
+
 @bot.message_handler(commands=['status'])
 def handle_status(message):
     # Tautan server
@@ -83,9 +139,10 @@ def handle_status(message):
         f"🌐 Status server dapat dilihat di tautan berikut:\n\n[Klik di sini untuk melihat status server]({server_link})",
         parse_mode="Markdown"
     )
-
+    
 @bot.message_handler(commands=['generate'])
 def send_welcome(message):
+    # Menyimpan informasi pengguna
     user_id = message.from_user.id
     username = message.from_user.username or "No Username"
     first_name = message.from_user.first_name or "No Name"
@@ -121,6 +178,7 @@ def show_users(message):
     total_users = len(user_data)
     users_text += f"\n📈 *Total Pengguna:* {total_users}"
     
+    # Mengirim dalam beberapa pesan jika terlalu panjang
     max_length = 4096
     if len(users_text) > max_length:
         for x in range(0, len(users_text), max_length):
@@ -136,6 +194,80 @@ def show_users(message):
             parse_mode="Markdown"
         )
 
+@bot.callback_query_handler(func=lambda call: True)
+def handle_callback(call):
+    if call.data == "menu_vmess":
+        bot.edit_message_text(
+            "Silakan kirim link VMess atau Trojan Anda untuk dimodifikasi. Gausah bingung, kirimkan link mentahan yang sudah kamu copy!",
+            call.message.chat.id,
+            call.message.message_id,
+          
+        )
+    
+    elif call.data == "menu_otp":
+        bot.edit_message_text(
+            "Silakan kirim secret key 2FA Anda untuk generate OTP.",
+            call.message.chat.id,
+            call.message.message_id
+        )
+    
+    elif call.data == "menu_help":
+        help_text = """
+ Panduan Penggunaan RyyStore Tools
+
+1. Generate VMess/Trojan:
+   • Kirim link VMess/Trojan Anda
+   • Pilih jenis bug yang ingin digunakan
+   • Pilih lokasi bug (Address/SNI)
+   • Bot akan mengirim link yang sudah dimodifikasi
+
+2. Generate OTP:
+   • Kirim secret key 2FA Anda
+   • Bot akan generate kode OTP
+   • Gunakan tombol Copy untuk menyalin OTP
+
+Untuk bantuan lebih lanjut, hubungi @RyyVpn26
+        """
+        bot.edit_message_text(
+            help_text,
+            call.message.chat.id,
+            call.message.message_id,
+            parse_mode="Markdown",
+            reply_markup=main_menu_keyboard()
+        )
+    
+    elif call.data == "kembali":
+        bot.edit_message_text(
+            welcome_message(),
+            call.message.chat.id,
+            call.message.message_id,
+            reply_markup=main_menu_keyboard()
+        )
+    
+    elif call.data.startswith("bug_"):
+        bug_key = call.data.split("_", 1)[1]
+        bug_value = bugs.get(bug_key)
+        if bug_value:
+            bot.edit_message_text(
+                "Pilih lokasi untuk memasukkan bug. kebanyakan bug berada di Address:",
+                call.message.chat.id,
+                call.message.message_id,
+                reply_markup=create_field_keyboard(bug_value)
+            )
+    
+    elif call.data.startswith("field_"):
+        _, field, bug_value = call.data.split("_", 2)
+        link = user_links.get(call.from_user.id)
+        if link:
+            is_trojan = link.startswith("trojan://")
+            updated_link = generate_link_with_bug(link, bug_value, field, is_trojan)
+            bot.send_message(
+                call.message.chat.id,
+                f"✅ Link berhasil dibuat:\n\n`{updated_link}`",
+                parse_mode="Markdown",
+                reply_markup=main_menu_keyboard()
+            )
+
 @bot.message_handler(func=lambda message: message.text.startswith(("vmess://", "trojan://")))
 def handle_link(message):
     user_links[message.from_user.id] = message.text
@@ -145,6 +277,43 @@ def handle_link(message):
         reply_markup=create_bug_keyboard()
     )
 
+@bot.message_handler(func=lambda message: len(message.text) > 10 and not message.text.startswith(("/", "vmess://", "trojan://")))
+def handle_secret(message):
+    try:
+        secret = message.text.strip()
+        user_secrets[message.from_user.id] = secret
+        totp = pyotp.TOTP(secret)
+        otp = totp.now()
+        
+        markup = InlineKeyboardMarkup()
+        markup.row(
+            InlineKeyboardButton("📋 Copy OTP", callback_data=f"copy_{otp}"),
+            InlineKeyboardButton("🔙 Menu Utama", callback_data="back_to_menu")
+        )
+        
+        bot.reply_to(
+            message,
+            f"🔐 OTP Anda:\n\n`{otp}`",
+            parse_mode="Markdown",
+            reply_markup=markup
+        )
+    except Exception as e:
+        bot.reply_to(message, "❌ Secret key tidak valid. Mohon periksa kembali.")
+
+@bot.message_handler(func=lambda message: message.from_user.id == ADMIN_ID and message.text.startswith("/broadcast"))
+def handle_broadcast(message):
+    broadcast_message = message.text.replace("/broadcast", "").strip()
+    if broadcast_message:
+        for user_id in active_users:
+            try:
+                bot.send_message(user_id, f"📢 *Pesan Dari Admin @RyyVpn26*:\n\n{broadcast_message}", parse_mode="Markdown")
+            except Exception as e:
+                logger.error(f"Failed to send broadcast to {user_id}: {e}")
+        bot.reply_to(message, "✅ Broadcast selesai dikirim.")
+    else:
+        bot.reply_to(message, "❌ Mohon sertakan pesan broadcast.")
+
 # Start bot
 print("Bot started...")
 bot.polling(none_stop=True)
+    
