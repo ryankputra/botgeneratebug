@@ -5,6 +5,7 @@ import json
 import pyotp
 import logging
 from datetime import datetime
+import sqlite3
 
 # Konfigurasi logging
 logging.basicConfig(
@@ -22,7 +23,6 @@ bot = telebot.TeleBot(API_TOKEN)
 user_links = {}
 user_secrets = {}
 active_users = set()
-user_data = {}  # Untuk menyimpan informasi pengguna
 
 # Dictionary pilihan bug
 bugs = {
@@ -34,6 +34,24 @@ bugs = {
     "xl_vip": "104.17.3.81",
     "byu_opok": "space.byu.id"
 }
+
+# Fungsi untuk menyimpan pengguna ke database
+def save_user_to_db(user_id, username, first_name, join_date):
+    conn = sqlite3.connect('bot_users.db')
+    c = conn.cursor()
+    c.execute("INSERT OR REPLACE INTO users (user_id, username, first_name, join_date) VALUES (?, ?, ?, ?)",
+              (user_id, username, first_name, join_date))
+    conn.commit()
+    conn.close()
+
+# Fungsi untuk mengambil semua pengguna dari database
+def get_all_users_from_db():
+    conn = sqlite3.connect('bot_users.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM users")
+    users = c.fetchall()
+    conn.close()
+    return users
 
 def main_menu_keyboard():
     markup = InlineKeyboardMarkup()
@@ -146,13 +164,9 @@ def send_welcome(message):
     user_id = message.from_user.id
     username = message.from_user.username or "No Username"
     first_name = message.from_user.first_name or "No Name"
+    join_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    user_data[user_id] = {
-        'username': username,
-        'first_name': first_name,
-        'join_date': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    }
-    
+    save_user_to_db(user_id, username, first_name, join_date)
     active_users.add(user_id)
     
     bot.send_message(
@@ -167,15 +181,17 @@ def show_users(message):
     if message.from_user.id != ADMIN_ID:
         return
     
+    users = get_all_users_from_db()
     users_text = "📊 *Daftar Pengguna Bot*\n\n"
-    for user_id, data in user_data.items():
-        users_text += f"👤 *Nama:* {data['first_name']}\n"
+    for user in users:
+        user_id, username, first_name, join_date = user
+        users_text += f"👤 *Nama:* {first_name}\n"
         users_text += f"🆔 *User ID:* `{user_id}`\n"
-        users_text += f"📝 *Username:* @{data['username']}\n"
-        users_text += f"📅 *Bergabung:* {data['join_date']}\n"
+        users_text += f"📝 *Username:* @{username}\n"
+        users_text += f"📅 *Bergabung:* {join_date}\n"
         users_text += "➖➖➖➖➖➖➖➖➖➖\n"
     
-    total_users = len(user_data)
+    total_users = len(users)
     users_text += f"\n📈 *Total Pengguna:* {total_users}"
     
     # Mengirim dalam beberapa pesan jika terlalu panjang
@@ -316,4 +332,3 @@ def handle_broadcast(message):
 # Start bot
 print("Bot started...")
 bot.polling(none_stop=True)
-    
