@@ -14,7 +14,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Konfigurasi Bot
-API_TOKEN = '7721294308:AAHTMdqL9WVGwJqSLcgB0NQt-sHJYey3XUM'
+API_TOKEN = '7716923032:AAHPQMZ1R0mFrI1voZ306oR3z85eO0fim6c'
 ADMIN_ID = 7251232303
 bot = telebot.TeleBot(API_TOKEN)
 
